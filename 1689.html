@@ -1,0 +1,70 @@
+<html>
+<head>
+<title>Errata for The Definitive Guide to SWT and JFace</title>
+</head>
+
+<body>
+<h1>Errata for The Definitive Guide to SWT and JFace</h1>
+Note: Because of printing lead times, the text of the book was completed before the release of Eclipse 3.0.
+The Eclipse team changed a few things in SWT and JFace during that time. This page lists those changes.
+
+<h2>Chapter 8</h2>
+<p>On page 228, we claim that tool bars are always horizontal on Windows. This is no longer the case for SWT 3.0--tool bars can now be vertical (thanks to Kyle Leveque for pointing this out).</p>
+<p>On page 255, the Table styles should now include SWT.VIRTUAL, for creating a virtual table.
+Virtual tables don't hold all their rows at once. Instead, they concern themselves only with those
+rows that are currently visible. This is extremely useful for tables that display large amounts of data.</p>
+<p>To use a virtual table, pass the SWT.VIRTUAL style to the Table's constructor. Tell the table how
+many rows it contains using Table's setItemCount(int) method, and then provide a listener that's invoked
+whenever the table should display new rows. The listener looks something like this:</p>
+<pre>
+table.addListener(SWT.SetData, new Listener() {
+  public void handleEvent(Event event) {
+    // event.item is the row, or TableItem, that the table must display
+    TableItem item = (TableItem) event.item;
+    
+    // Do something with the TableItem
+    item.setText(0, myData[table.indexOf(item)][0]);
+    item.setText(1, myData[table.indexOf(item)][1]);
+  }
+});
+</pre>
+<p>The VirtualTable application in the Chapter 8 source code demonstrates virtual tables.</p>
+<p>On page 258, the method:</p>
+<pre>void showColumn(TableColumn column)</pre>
+<p>should be added. This method is the horizontally-scrolling counterpart of showItem(), and scrolls
+the specified column into view.</p>
+<p>Tables now support setting fonts by row or even by cell. On page 261, methods should be added for getting and setting fonts.
+These methods are:
+<pre>
+Font getFont() -- Returns the font for this TableItem
+Font getFont(int index) -- Returns the font for the cell specified by index
+void setFont(Font font) -- Sets the font for this TableItem
+void setFont(int index, Font font) -- Sets the font for the cell specified by index
+</pre>
+
+<h2>Chapter 9</h2>
+<p>On page 296, the CTabFolder style constants should now include SWT.CLOSE. 
+The SWT.CLOSE style adds the close button to the tab, and is now the preferred method for doing so.
+The addCTabFolderListener() method has been deprecated, although it still works to add a close button
+to the tab.
+
+<h2>Chapter 11</h2>
+<p>On page 451, the styles that StyleRange now supports includes SWT.ITALIC, for
+italicized text. This style can be combined with SWT.BOLD.</p>
+
+<h2>Chapter 12</h2>
+<p>On page 517, the list of platforms that support the Web browser component now includes
+Mac OS X, which requires the Safari browser, as well as QNX.</p>
+<p>On page 522, two Browser methods have been added: isBackEnabled() returns true if you can go back a page in the browser history, and
+isForwardEnabled() returns true if you can go forward a page in the browser history
+</p>
+
+<h2>Chapter 18</h2>
+<p>Pages 751 - 759 describe finding and replacing using FindReplaceDocumentAdapter. This class had an issue with repeated finds, 
+as reported in Bug #52888. In a good news/bad news scenario, they fixed the bug, but broke the API. Consequently, the
+FindReplaceDialog in the book will not compile.</p>
+<p>The new API is easier to use, however: call FindReplaceDocumentAdapter.find() to do a find, and
+FindReplaceDocumentAdapter.replace() to do a replace. The source code has been updated to use the new API.
+</body>
+</html>
+

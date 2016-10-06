@@ -1,0 +1,69 @@
+<project name="GenericJFaceApplication" default="run" basedir=".">
+  <description>
+    Generic JFace Application build and execution file
+  </description>
+
+  <property name="main.class"  value=""/>
+  <property name="src"         location="."/>
+  <property name="build"       location="."/>
+
+  <!-- Update location to match your eclipse home directory  -->
+  <property name="ecl.home"    location="c:\eclipse"/>
+
+  <!-- Update value to match your windowing system (win32, gtk, motif, etc.) -->
+  <property name="win.sys"     value="win32"/>
+
+  <!-- Update value to match your os (win32, linux, etc.) -->
+  <property name="os.sys"      value="win32"/>
+
+  <!-- Update value to match your architecture -->
+  <property name="arch"        value="x86"/>
+
+  <!-- Update value to match your SWT version -->
+  <property name="swt.ver"     value="3.0.0"/>
+
+  <!-- Do not edit below this line -->
+  <property name="swt.subdir"  location="${ecl.home}/plugins/org.eclipse.swt.${win.sys}_${swt.ver}"/>
+  <property name="swt.jar.lib" location="${swt.subdir}/ws/${win.sys}"/> 
+  <property name="swt.jni.lib" location="${swt.subdir}/os/${os.sys}/${arch}"/>
+  <property name="runtime.jar.lib" location="${ecl.home}/plugins/org.eclipse.core.runtime_${swt.ver}"/>
+  <property name="jface.jar.lib" location="${ecl.home}/plugins/org.eclipse.jface_${swt.ver}"/>
+  <property name="osgi.jar.lib" location="${ecl.home}/plugins/org.eclipse.osgi_${swt.ver}"/>
+  <property name="jfacetext.jar.lib" location="${ecl.home}/plugins/org.eclipse.jface.text_${swt.ver}"/>
+  <property name="text.jar.lib" location="${ecl.home}/plugins/org.eclipse.text_${swt.ver}"/>
+
+  <path id="project.class.path">
+  <pathelement path="${build}"/>
+    <fileset dir="${swt.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${runtime.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${jface.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${osgi.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${jfacetext.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+    <fileset dir="${text.jar.lib}">
+      <include name="**/*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="compile">
+    <javac srcdir="${src}" destdir="${build}">
+      <classpath refid="project.class.path"/>
+    </javac>
+  </target>
+
+  <target name="run" depends="compile">
+    <java classname="${main.class}" fork="true" failonerror="true">
+      <jvmarg value="-Djava.library.path=${swt.jni.lib}"/> 
+      <classpath refid="project.class.path"/>
+    </java>
+  </target>
+</project>
